@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: go-api-skeleton
+  name: go-api-skeleton
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-api-skeleton
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app: go-api-skeleton
+      name: go-api-skeleton
+    spec:
+      containers:
+      - env:
+        - name: GRPC_PORT
+          value: "24000"
+        - name: HTTP_PORT
+          value: "8080"
+        image: {IMAGE}
+        imagePullPolicy: IfNotPresent
+        name: go-api-skeleton
+        ports:
+        - containerPort: 24000
+          name: grpc
+          protocol: TCP
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 200Mi
+          requests:
+            cpu: 500m
+            memory: 200Mi
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

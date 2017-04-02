@@ -1,0 +1,12 @@
+syntax = "proto3";
+package grpc_skeleton;
+
+service Skeleton {
+    rpc GetObject(Object) returns (Object) {}
+}
+
+// An Object that contains an id and name
+message Object {
+    int64 id = 1;
+    string name = 2;
+}
